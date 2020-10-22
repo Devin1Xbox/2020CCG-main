@@ -15,9 +15,9 @@ import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRRangeSensor;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public abstract class Robot extends LinearOpMode {
 
@@ -25,6 +25,8 @@ public abstract class Robot extends LinearOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     ColorSensor colorSensor;
+
+    DistanceSensor distanceSensor;
 
     Servo armServo, armServo1;
 
@@ -43,6 +45,7 @@ public abstract class Robot extends LinearOpMode {
         armServo = hardwareMap.get(ServoImpl.class, "armServo");
         armServo1 = hardwareMap.get(ServoImpl.class, "armServo1");
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);

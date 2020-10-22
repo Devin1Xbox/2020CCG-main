@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Robot;
 
 
@@ -74,13 +75,13 @@ public class Main extends Robot {
             telemetry.addData("armMotor", this.armMotor.getPower());
             telemetry.addData("servoPosition", this.armServo.getPosition());
             telemetry.addData("servo1Position", this.armServo1.getPosition());
+            telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
             telemetry.update();
 
 
             //forward
             if ((gamepad1.left_stick_y >= gamepad1.left_stick_x) && (gamepad1.left_stick_y >= -gamepad1.left_stick_x)) {
                 this.goForward(gamepad1.left_stick_y);
-
             }
 
             if ((gamepad1.left_stick_y <= gamepad1.left_stick_x) && (gamepad1.left_stick_y <= -gamepad1.left_stick_x)) {
