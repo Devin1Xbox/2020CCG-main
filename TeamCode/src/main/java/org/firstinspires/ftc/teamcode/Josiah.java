@@ -40,7 +40,6 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
@@ -72,6 +71,7 @@ public class Josiah extends LinearOpMode {
     private DistanceSensor distanceSensor = null;
 
     @Override
+
     public void runOpMode() {
 
         // Initialize the hardware variables. Note that the strings used here as parameters
