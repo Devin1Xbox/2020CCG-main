@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -68,8 +69,6 @@ public class Josiah extends LinearOpMode {
 
     private DcMotor motor = null;
 
-    private DistanceSensor distanceSensor = null;
-
     @Override
 
     public void runOpMode() {
@@ -78,22 +77,29 @@ public class Josiah extends LinearOpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         motor = hardwareMap.get(DcMotor.class, "right_drive");
-
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
-            telemetry.update();
+            //telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
+            //telemetry.update();
             
             if ((gamepad1.left_stick_y >= gamepad1.left_stick_x) && (gamepad1.left_stick_y >= -gamepad1.left_stick_x)) {
-                this.goForward(gamepad1.left_stick_y);
+                this.goForward(gamepad1.left_stick_y / 2);
             }
 
             if ((gamepad1.left_stick_y <= gamepad1.left_stick_x) && (gamepad1.left_stick_y <= -gamepad1.left_stick_x)) {
-                this.goBackward(gamepad1.left_stick_y);
+                this.goBackward(gamepad1.left_stick_y / 2);
             }
+
+//            if(gamepad1.left_bumper) {
+//                servo.setPosition(-1.0);
+//            }
+//
+//            if(gamepad1.right_bumper) {
+//                servo.setPosition(1.0);
+//            }
         }
     }
 }

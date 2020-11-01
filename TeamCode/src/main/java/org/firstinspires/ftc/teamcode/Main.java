@@ -66,15 +66,14 @@ public class Main extends Robot {
         waitForStart();
 
         while (opModeIsActive()) {
-//            colorSensor.enableLed(true);
             armMotor.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("frontLeftMotor", this.frontLeftMotor.getPower());
             telemetry.addData("backLeftMotor", this.backLeftMotor.getPower());
             telemetry.addData("frontRightMotor", this.frontRightMotor.getPower());
             telemetry.addData("backRightMotor", this.backRightMotor.getPower());
             telemetry.addData("armMotor", this.armMotor.getPower());
-            telemetry.addData("servoPosition", this.armServo.getPosition());
-            telemetry.addData("servo1Position", this.armServo1.getPosition());
+            telemetry.addData("armWobble", this.armWobble.getPower());
+            telemetry.addData("servo", this.servo.getPosition());
             telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
             telemetry.update();
 
@@ -104,24 +103,28 @@ public class Main extends Robot {
                 this.strafeRight(gamepad1.right_trigger);
             }
 
-            if (gamepad2.b) {
-                this.resetArm();
+            if (gamepad2.right_stick_x < 0) {
+                this.armWobble(gamepad2.right_stick_x);
             }
 
-            if (gamepad2.left_stick_y < 0) {
-                this.arm(gamepad2.left_stick_y);
+            if(gamepad2.right_stick_x > 0) {
+                this.armWobble(-gamepad2.right_stick_x);
             }
 
-            if (gamepad2.left_stick_y > 0) {
-                this.arm(-gamepad2.left_stick_y);
+            if (gamepad2.left_stick_x < 0) {
+                this.arm(gamepad2.left_stick_x);
+            }
+
+            if (gamepad2.left_stick_x > 0) {
+                this.arm(-gamepad2.left_stick_x);
             }
 
             if (gamepad2.left_bumper) {
-                this.openArm();
+                this.servo0();
             }
 
             if (gamepad2.right_bumper){
-                this.closeArm();
+                this.servo1();
             }
         }
 

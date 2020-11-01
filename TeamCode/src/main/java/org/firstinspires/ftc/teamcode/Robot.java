@@ -24,15 +24,11 @@ public abstract class Robot extends LinearOpMode {
 
     ElapsedTime runtime = new ElapsedTime();
 
-    ColorSensor colorSensor;
-
     DistanceSensor distanceSensor;
 
-    Servo armServo, armServo1;
+    Servo servo;
 
-    DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor, armMotor;
-
-    int red, green, blue;
+    DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor, armMotor, armWobble;
 
     @Override
     public void runOpMode() {
@@ -42,11 +38,9 @@ public abstract class Robot extends LinearOpMode {
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
-        armServo = hardwareMap.get(ServoImpl.class, "armServo");
-        armServo1 = hardwareMap.get(ServoImpl.class, "armServo1");
-        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        servo = hardwareMap.get(Servo.class, "servo");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
-
+        armWobble = hardwareMap.get(DcMotor.class, "armWobble");
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -128,15 +122,12 @@ public abstract class Robot extends LinearOpMode {
         telemetry.update();
     }
 
-    void openArm() {
-        armServo.setPosition(1);
-        armServo1.setPosition(0);
+    void servo1() {
+        servo.setPosition(1.0);
     }
 
-    void closeArm() {
-        armServo.setPosition(0);
-        this.sleep(213);
-        armServo1.setPosition(1);
+    void servo0() {
+        servo.setPosition(-1.0);
     }
 
     void goForwardsInInches(double inches) {
@@ -145,12 +136,6 @@ public abstract class Robot extends LinearOpMode {
         this.runtime.reset();
 
         while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime && opModeIsActive()) {
-            red = colorSensor.red();
-            blue = colorSensor.blue();
-            green = colorSensor.green();
-            telemetry.addData("currentBlueValue", blue);
-            telemetry.addData("currentRedValue", red);
-            telemetry.addData("currentGreenValue", green);
             telemetry.update();
             this.goForward(-0.75);
         }
@@ -164,12 +149,6 @@ public abstract class Robot extends LinearOpMode {
         this.runtime.reset();
 
         while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
-            red = colorSensor.red();
-            blue = colorSensor.blue();
-            green = colorSensor.green();
-            telemetry.addData("currentBlueValue", blue);
-            telemetry.addData("currentRedValue", red);
-            telemetry.addData("currentGreenValue", green);
             telemetry.update();
             this.goBackward(0.375);
         }
@@ -183,12 +162,6 @@ public abstract class Robot extends LinearOpMode {
         this.runtime.reset();
 
         while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
-            red = colorSensor.red();
-            blue = colorSensor.blue();
-            green = colorSensor.green();
-            telemetry.addData("currentBlueValue", blue);
-            telemetry.addData("currentRedValue", red);
-            telemetry.addData("currentGreenValue", green);
             telemetry.update();
             this.turnLeft(-0.75);
         }
@@ -201,12 +174,6 @@ public abstract class Robot extends LinearOpMode {
         this.runtime.reset();
 
         while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
-            red = colorSensor.red();
-            blue = colorSensor.blue();
-            green = colorSensor.green();
-            telemetry.addData("currentBlueValue", blue);
-            telemetry.addData("currentRedValue", red);
-            telemetry.addData("currentGreenValue", green);
             telemetry.update();
             this.turnRight(-0.75);
         }
@@ -218,12 +185,6 @@ public abstract class Robot extends LinearOpMode {
         this.runtime.reset();
 
         while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
-            red = colorSensor.red();
-            blue = colorSensor.blue();
-            green = colorSensor.green();
-            telemetry.addData("currentBlueValue", blue);
-            telemetry.addData("currentRedValue", red);
-            telemetry.addData("currentGreenValue", green);
             telemetry.update();
             this.strafeLeft(0.75);
         }
@@ -236,8 +197,8 @@ public abstract class Robot extends LinearOpMode {
 
         while (
                 this.opModeIsActive() && // user hasn't hit the stop button
-                        this.runtime.milliseconds() < 3.5 && // strafe for 10 seconds max in case it doesn't find the skystone
-                        !isSkystone()
+                        this.runtime.milliseconds() < 3.5  // strafe for 10 seconds max in case it doesn't find the skystone
+
         ) {
             // nested while loop for compensating for inconsistent strafing
             // every 1.6 seconds we turn slightly to the right because it doesn't strafe straight
@@ -262,13 +223,6 @@ public abstract class Robot extends LinearOpMode {
 //                turnRightInMilli(50);
 //                goForwardsInInches(.3);
 //            }
-            Log.i("STRAFING", "red: " + red);
-            red = colorSensor.red();
-            blue = colorSensor.blue();
-            green = colorSensor.green();
-            telemetry.addData("currentBlueValue", blue);
-            telemetry.addData("currentRedValue", red);
-            telemetry.addData("currentGreenValue", green);
             telemetry.update();
             this.strafeLeft(0.25);
 
@@ -280,8 +234,8 @@ public abstract class Robot extends LinearOpMode {
 
         while (
                 this.opModeIsActive() && // user hasn't hit the stop button
-                        this.runtime.milliseconds() < 5000 && // strafe for 10 seconds max in case it doesn't find the skystone
-                        !isSkystone()
+                        this.runtime.milliseconds() < 5000 // strafe for 10 seconds max in case it doesn't find the skystone
+
         ) {
             // nested while loop for compensating for inconsistent strafing
             // every 1.6 seconds we turn slightly to the right because it doesn't strafe straight
@@ -306,39 +260,18 @@ public abstract class Robot extends LinearOpMode {
 //                turnRightInMilli(50);
 //                goForwardsInInches(.3);
 //            }
-            Log.i("STRAFING", "red: " + red);
-            red = colorSensor.red();
-            blue = colorSensor.blue();
-            green = colorSensor.green();
-            telemetry.addData("currentBlueValue", blue);
-            telemetry.addData("currentRedValue", red);
-            telemetry.addData("currentGreenValue", green);
             telemetry.update();
             this.strafeRight(0.25);
 
         }
     }
 
-    boolean isSkystone() {
-        if (red < 19 && red > 14){
-            Log.i("SKYSTONE-DETECT", "true");
-            return true;
-        }
-        Log.i("SKYSTONE-DETECT", "false");
-        return false;
-    }
 
     void strafeRightInInches(double inches) {
         double calculatedTime = inches * 36.73469388;
         this.runtime.reset();
 
         while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
-            red = colorSensor.red();
-            blue = colorSensor.blue();
-            green = colorSensor.green();
-            telemetry.addData("currentBlueValue", blue);
-            telemetry.addData("currentRedValue", red);
-            telemetry.addData("currentGreenValue", green);
             telemetry.update();
             this.strafeRight(0.75);
         }
@@ -408,5 +341,21 @@ public abstract class Robot extends LinearOpMode {
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    boolean isRing() {
+        telemetry.addData("range: ", String.format("%.01f in", distanceSensor.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
+        telemetry.update();
+        if(distanceSensor.getDistance(DistanceUnit.INCH) < 6) {
+            //its a ring yay
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void armWobble(double power) {
+        armWobble.setPower(power);
     }
 }
