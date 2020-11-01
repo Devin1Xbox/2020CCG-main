@@ -103,21 +103,25 @@ public class Main extends Robot {
                 this.strafeRight(gamepad1.right_trigger);
             }
 
-            if (gamepad2.right_stick_x < 0) {
-                this.armWobble(gamepad2.right_stick_x);
-            }
+            this.armWobble(gamepad2.right_stick_x);
+            this.arm(gamepad2.left_stick_x);
 
-            if(gamepad2.right_stick_x > 0) {
-                this.armWobble(-gamepad2.right_stick_x);
-            }
 
-            if (gamepad2.left_stick_x < 0) {
-                this.arm(gamepad2.left_stick_x);
-            }
-
-            if (gamepad2.left_stick_x > 0) {
-                this.arm(-gamepad2.left_stick_x);
-            }
+//            if (gamepad2.right_stick_x <= -.05) {
+//                this.armWobble(gamepad2.right_stick_x);
+//            }
+//
+//            if(gamepad2.right_stick_x >= 0.05) {
+//                this.armWobble(gamepad2.right_stick_x);
+//            }
+//
+//            if (gamepad2.left_stick_x <= -.05) {
+//                this.arm(gamepad2.left_stick_x);
+//            }
+//
+//            if (gamepad2.left_stick_x >= .05) {
+//                this.arm(gamepad2.left_stick_x);
+//            }
 
             if (gamepad2.left_bumper) {
                 this.servo0();
