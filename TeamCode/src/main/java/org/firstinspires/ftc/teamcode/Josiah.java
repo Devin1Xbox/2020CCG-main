@@ -97,6 +97,3 @@ public class Josiah extends LinearOpMode {
         }
     }
 }
-
-
-

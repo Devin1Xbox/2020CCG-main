@@ -56,7 +56,6 @@ public abstract class Robot extends LinearOpMode {
 
     void goForward(double power) {
         // func of making robot go forwards
-
         frontLeftMotor.setPower(power);
         backLeftMotor.setPower(power);
         frontRightMotor.setPower(power);
@@ -65,7 +64,6 @@ public abstract class Robot extends LinearOpMode {
 
     void goBackward(double power) {
         // func of making robot go backwards
-
         frontLeftMotor.setPower(power);
         backLeftMotor.setPower(power);
         frontRightMotor.setPower(power);
@@ -73,14 +71,11 @@ public abstract class Robot extends LinearOpMode {
     }
 
     void turnLeft(double power) {
-
         // func of making robot go left
         frontLeftMotor.setPower(-power);
         backLeftMotor.setPower(-power);
         frontRightMotor.setPower(power);
         backRightMotor.setPower(power);
-
-
     }
 
     void turnRight(double power) {
@@ -145,7 +140,7 @@ public abstract class Robot extends LinearOpMode {
     }
 
     void goForwardsInInches(double inches) {
-        // we need to do some trail runs to find the real calculation
+        // we need to do some trial runs to find the real calculation
         double calculatedTime = inches * 36.73469388;
         this.runtime.reset();
 
@@ -364,11 +359,9 @@ public abstract class Robot extends LinearOpMode {
         frontRightMotor.setTargetPosition(position);
         backRightMotor.setTargetPosition(-position);
 
-
         this.setRunToPosition();
 
         goForward(power);
-
 
         while (
                 opModeIsActive()
@@ -385,7 +378,6 @@ public abstract class Robot extends LinearOpMode {
             telemetry.addData("frontRight position", positionFR);
             telemetry.addData("backRight position", positionBR);
             telemetry.update();
-
         }
     }
 
@@ -417,5 +409,4 @@ public abstract class Robot extends LinearOpMode {
         backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
 }
