@@ -110,7 +110,7 @@ public class Main extends Robot {
             }
 
             if(gamepad2.right_trigger == 0) {
-                this.arm(gamepad2.left_trigger * 0.75);
+                this.arm(-gamepad2.left_trigger * 0.75);
             }
 
 //            if (gamepad2.right_stick_x <= -.05) {
