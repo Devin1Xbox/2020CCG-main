@@ -348,7 +348,7 @@ public abstract class Robot extends LinearOpMode {
         telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
         telemetry.update();
         if(distanceSensor.getDistance(DistanceUnit.INCH) < 6) {
-            //its a ring yay
+            //its a ring yay          fix the distance it needs to be
             return true;
         } else {
             return false;
