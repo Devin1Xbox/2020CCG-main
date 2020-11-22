@@ -73,7 +73,7 @@ public class Main extends Robot {
             telemetry.addData("backRightMotor", this.backRightMotor.getPower());
             telemetry.addData("armMotor", this.armMotor.getPower());
             telemetry.addData("armWobble", this.armWobble.getPower());
-            telemetry.addData("servo", this.servo.getPosition());
+            telemetry.addData("servo", this.wobbleServo.getPosition());
             telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
             telemetry.update();
 
@@ -103,8 +103,6 @@ public class Main extends Robot {
                 this.strafeRight(gamepad1.right_trigger);
             }
 
-            this.armWobble(gamepad2.right_stick_x * 0.75 + gamepad2.left_stick_x * 0.1);
-
             if(gamepad2.left_trigger == 0) {
                 this.arm(gamepad2.right_trigger * 0.75);
             }
@@ -113,55 +111,29 @@ public class Main extends Robot {
                 this.arm(-gamepad2.left_trigger * 0.75);
             }
 
-//            if (gamepad2.right_stick_x <= -.05) {
-//                this.armWobble(gamepad2.right_stick_x);
-//            }
-//
-//            if(gamepad2.right_stick_x >= 0.05) {
-//                this.armWobble(gamepad2.right_stick_x);
-//            }
-//
-//            if (gamepad2.left_stick_x <= -.05) {
-//                this.arm(gamepad2.left_stick_x);
-//            }
-//
-//            if (gamepad2.left_stick_x >= .05) {
-//                this.arm(gamepad2.left_stick_x);
-//            }
-
-            if (gamepad2.left_bumper) {
-                this.servo0();
+            if (gamepad2.right_stick_x <= -.05) {
+                this.armWobble(gamepad2.right_stick_x);
             }
 
-            if (gamepad2.right_bumper){
-                this.servo1();
+            if(gamepad2.right_stick_x >= 0.05) {
+                this.armWobble(gamepad2.right_stick_x);
             }
+
+            if (gamepad2.left_stick_x <= -.05) {
+                this.arm(gamepad2.left_stick_x);
+            }
+
+            if (gamepad2.left_stick_x >= .05) {
+                this.arm(gamepad2.left_stick_x);
+            }
+
+            if(gamepad2.right_bumper) {
+                this.toggleServoLock();
+            }
+
         }
 
-//            if(gamepad2.left_stick_y > gamepad2.left_stick_x) {
-//                int am = armMotor.getCurrentPosition();
-//                armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                armMotor.getCurrentPosition();
-//                this.arm(gamepad2.left_stick_y * 0.05);
-//                while(am <= 0) {
-//                    this.arm(0);
-//                }
-//            }
-//
-//            if(gamepad2.left_stick_y < gamepad2.left_stick_x) {
-//                int am = armMotor.getCurrentPosition();
-//                armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//                armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                armMotor.getCurrentPosition();
-//                this.arm(gamepad2.left_stick_y);
-//                while(am <= 0) {
-//                    this.arm(0);
-//                }
-//            }
-//        colorSensor.enableLed(false);
     }
-
 
 }
 
