@@ -204,7 +204,9 @@ public abstract class Robot extends LinearOpMode {
     void toggleServoLock() {
         telemetry.addData("servo position: ", wobbleServo.getPosition());
         telemetry.update();
-        if(lockTimer.seconds() < 2.5) {
+
+
+        if(lockTimer.seconds() > 0.25) {
             lockTimer.reset();
             if(this.wobbleServo.getPosition() > 0) {
                 this.wobbleServo.setPosition(-1.0);

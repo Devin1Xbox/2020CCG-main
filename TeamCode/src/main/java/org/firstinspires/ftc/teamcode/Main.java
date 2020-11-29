@@ -111,13 +111,14 @@ public class Main extends Robot {
                 this.arm(-gamepad2.left_trigger * 0.75);
             }
 
-            if (gamepad2.right_stick_x <= -.05) {
-                this.armWobble(gamepad2.right_stick_x);
-            }
-
-            if(gamepad2.right_stick_x >= 0.05) {
-                this.armWobble(gamepad2.right_stick_x);
-            }
+//            if (gamepad2.right_stick_x <= -.05) {
+//                this.armWobble(gamepad2.right_stick_x);
+//            }
+//
+//            if(gamepad2.right_stick_x >= 0.05) {
+//                this.armWobble(gamepad2.right_stick_x);
+//            }
+            this.armWobble(gamepad2.right_stick_x);
 
             if (gamepad2.left_stick_x <= -.05) {
                 this.arm(gamepad2.left_stick_x);
