@@ -182,17 +182,15 @@ public abstract class Robot extends LinearOpMode {
         this.sleep(2000);
     }
 
-
-    boolean isRing() {
-        telemetry.addData("range: ", String.format("%.01f in", distanceSensor.getDistance(DistanceUnit.INCH)));
-        telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
-        telemetry.update();
+    int isRing() {
         try {
-            if (distanceSensor.getDistance(DistanceUnit.MM) < 30) {
+            if (distanceSensor.getDistance(DistanceUnit.MM) > 168) {
                 //its a ring yay          fix the distance it needs to be
-                return true;
+                return 0;
+            } else if (distanceSensor.getDistance(DistanceUnit.MM) < 152 && distanceSensor.getDistance(DistanceUnit.MM) > 144) {
+                return 1;
             } else {
-                return false;
+                return 3;
             }
         } catch (Exception e) {
             e.printStackTrace();
