@@ -127,7 +127,7 @@ public abstract class Robot extends LinearOpMode {
 
         while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
             telemetry.update();
-            this.goBackward(0.375);
+            this.goBackward(0.5);
         }
         this.stopMotors();
         this.sleep(500);
@@ -184,13 +184,15 @@ public abstract class Robot extends LinearOpMode {
 
     int isRing() {
         try {
-            if (distanceSensor.getDistance(DistanceUnit.MM) > 168) {
+            if (distanceSensor.getDistance(DistanceUnit.MM) >= 165) {
                 //its a ring yay          fix the distance it needs to be
                 return 0;
-            } else if (distanceSensor.getDistance(DistanceUnit.MM) < 152 && distanceSensor.getDistance(DistanceUnit.MM) > 144) {
+            } else if (distanceSensor.getDistance(DistanceUnit.MM) <= 163 && distanceSensor.getDistance(DistanceUnit.MM) >= 130) {
                 return 1;
-            } else {
+            } else if (distanceSensor.getDistance(DistanceUnit.MM) <= 120 && distanceSensor.getDistance(DistanceUnit.MM) >= 90) {
                 return 3;
+            } else {
+                return 69420;
             }
         } catch (Exception e) {
             e.printStackTrace();
