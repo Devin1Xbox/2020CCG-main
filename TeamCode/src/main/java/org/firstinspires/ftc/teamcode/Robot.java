@@ -9,8 +9,22 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
 
-public abstract class Robot extends LinearOpMode {
+import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION1_TOPLEFT_ANCHOR_POINT;
+import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION_HEIGHT;
+import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION_WIDTH;
+
+public abstract class Robot extends EasyOpenCVExample {
 
 
     ElapsedTime runtime = new ElapsedTime();
@@ -183,16 +197,25 @@ public abstract class Robot extends LinearOpMode {
     }
 
     int isRing() {
+        Point region1_pointA = new Point(
+                REGION1_TOPLEFT_ANCHOR_POINT.x,
+                REGION1_TOPLEFT_ANCHOR_POINT.y);
+        Point region1_pointB = new Point(
+                REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+        final int FOUR_RING_THRESHOLD = 147;
+        final int ONE_RING_THRESHOLD = 135;
+        Mat Cb = new Mat();
+        Mat region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
+        int avg1 = (int) Core.mean(region1_Cb).val[0];
+        Mat YCrCb = new Mat();
         try {
-            if (distanceSensor.getDistance(DistanceUnit.MM) >= 165) {
-                //its a ring yay          fix the distance it needs to be
-                return 0;
-            } else if (distanceSensor.getDistance(DistanceUnit.MM) <= 163 && distanceSensor.getDistance(DistanceUnit.MM) >= 130) {
+            if(avg1 > FOUR_RING_THRESHOLD){
+                return 4;
+            }else if (avg1 > ONE_RING_THRESHOLD){
                 return 1;
-            } else if (distanceSensor.getDistance(DistanceUnit.MM) <= 120 && distanceSensor.getDistance(DistanceUnit.MM) >= 90) {
-                return 3;
-            } else {
-                return 69420;
+            }else{
+                return 0;
             }
         } catch (Exception e) {
             e.printStackTrace();

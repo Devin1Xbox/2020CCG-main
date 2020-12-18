@@ -56,10 +56,11 @@ public class AutonomousPrototype extends Robot {
 ////            }
 
             this.goForwardsInInches(3);
-            this.turnLeftInMilli(1260);
-            this.strafeRightInInches(37);
-            this.goBackwardsInInches(21);
+            this.strafeRightInInches(5);
             stopMotors();
+            if(isRing() == 4) {
+
+            }
 //            if(isRing() == 0) {
 //                this.goForwardsInInches(14);
 //            } else if(isRing() == 1) {
