@@ -33,7 +33,7 @@ public abstract class Robot extends EasyOpenCVExample {
 
     DistanceSensor distanceSensor;
 
-    Servo wobbleServo;
+    Servo wobbleServo, armServoL, armServoR;
 
     DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor, armMotor, armWobble;
 
@@ -48,6 +48,8 @@ public abstract class Robot extends EasyOpenCVExample {
         wobbleServo = hardwareMap.get(Servo.class, "servo");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         armWobble = hardwareMap.get(DcMotor.class, "armWobble");
+        armServoL = hardwareMap.get(Servo.class, "armServoL");
+        armServoR = hardwareMap.get(Servo.class, "armServoR");
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -256,5 +258,9 @@ public abstract class Robot extends EasyOpenCVExample {
                 this.wobbleServo.setPosition(1.0);
             }
         }
+    }
+
+    void armLift(power) {
+        this.armServoL.setPosition
     }
 }
