@@ -260,7 +260,9 @@ public abstract class Robot extends EasyOpenCVExample {
         }
     }
 
-    void armLift(power) {
-        this.armServoL.setPosition
+    void armLift(int power) {
+        this.armServoL.setPosition(power);
+        this.armServoR.setPosition(-power);
     }
+
 }
