@@ -58,6 +58,7 @@ public class AutonomousPrototype extends Robot {
             this.goForwardsInInches(3);
             this.strafeRightInInches(5);
             stopMotors();
+            // from top view, A == 0 == bottom, B == 1 == middle, C == 4 == top
             if(isRing() == 4) {
 
             }
