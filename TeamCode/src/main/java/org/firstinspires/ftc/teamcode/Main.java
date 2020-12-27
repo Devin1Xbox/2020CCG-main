@@ -74,7 +74,6 @@ public class Main extends Robot {
             telemetry.addData("armMotor", this.armMotor.getPower());
             telemetry.addData("armWobble", this.armWobble.getPower());
             telemetry.addData("servo", this.wobbleServo.getPosition());
-            telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
             telemetry.update();
 
 
@@ -103,22 +102,37 @@ public class Main extends Robot {
                 this.strafeRight(gamepad1.right_trigger);
             }
 
-            if(gamepad2.left_trigger == 0) {
-                this.arm(gamepad2.right_trigger * 0.75);
+
+            if (gamepad2.dpad_left) {
+                this.arm(0.2);
+            }
+            if (gamepad2.dpad_right) {
+                this.arm(-0.2);
+            }else {
+                this.arm(0.0);
             }
 
-            if(gamepad2.right_trigger == 0) {
-                this.arm(-gamepad2.left_trigger * 0.75);
+            this.moveVerticalLift(gamepad2.right_stick_y);
+
+            if (this.gamepad2.dpad_up) {
+                this.moveRingGrabberArm(0.33);
+            } else if (this.gamepad2.dpad_down) {
+                this.moveRingGrabberArm(-0.33);
+            } else {
+                this.moveRingGrabberArm(0);
             }
 
-//            if (gamepad2.right_stick_x <= -.05) {
-//                this.armWobble(gamepad2.right_stick_x);
-//            }
-//
-//            if(gamepad2.right_stick_x >= 0.05) {
-//                this.armWobble(gamepad2.right_stick_x);
-//            }
-            this.armWobble(gamepad2.right_stick_x);
+            if (gamepad2.a) {
+                this.closeRingGrabber();
+            }
+
+            if (gamepad2.b) {
+                this.openRingGrabber();
+            }
+
+            if (gamepad2.x) {
+                this.ringGrabberArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            }
 
             if (gamepad2.left_stick_x <= -.05) {
                 this.arm(gamepad2.left_stick_x);
@@ -127,6 +141,9 @@ public class Main extends Robot {
             if (gamepad2.left_stick_x >= .05) {
                 this.arm(gamepad2.left_stick_x);
             }
+
+            this.armWobble(gamepad2.right_trigger);
+            this.armWobble(-gamepad2.left_trigger);
 
             if(gamepad2.right_bumper) {
                 this.toggleServoLock();
@@ -137,5 +154,3 @@ public class Main extends Robot {
     }
 
 }
-
-//haha im brain look at me lol out loud
