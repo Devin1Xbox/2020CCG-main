@@ -12,6 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 
+import org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline;
+
 @Autonomous(name = "AutonomousPrototype", group = "Autonomous")
 public class AutonomousPrototype extends Robot {
 
@@ -28,7 +30,7 @@ public class AutonomousPrototype extends Robot {
         while(opModeIsActive()) {
             telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
             telemetry.addData("range: ", String.format("%.01f in", distanceSensor.getDistance(DistanceUnit.INCH)));
-            telemetry.addData("rings: ", isRing());
+//            telemetry.addData("rings: ", isRing());
             telemetry.update();
             //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
 //            while (isRing() == 0 && time <= 3000) {
@@ -58,21 +60,16 @@ public class AutonomousPrototype extends Robot {
             this.goForwardsInInches(3);
             this.strafeRightInInches(5);
             stopMotors();
+//            if(ringNumber())
             // from top view, A == 0 == bottom, B == 1 == middle, C == 4 == top
-            if(isRing() == 4) {
-
-            }
+//            if(isRing() == 4) {
+//
+//            }
 //            if(isRing() == 0) {
 //                this.goForwardsInInches(14);
 //            } else if(isRing() == 1) {
 //
 //            }
-            while(opModeIsActive()) {
-                telemetry.addData("range: ", String.format("%.01f mm", distanceSensor.getDistance(DistanceUnit.MM)));
-                telemetry.addData("range: ", String.format("%.01f in", distanceSensor.getDistance(DistanceUnit.INCH)));
-                telemetry.addData("rings: ", isRing());
-                telemetry.update();
             }
         }
     }
-}

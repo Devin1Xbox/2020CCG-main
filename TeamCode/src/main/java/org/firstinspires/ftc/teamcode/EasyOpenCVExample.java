@@ -69,7 +69,7 @@ public class EasyOpenCVExample extends LinearOpMode
 
         while (opModeIsActive())
         {
-            telemetry.addData("Analysis", pipeline.getAnalysis());
+            telemetry.addData("Number of Rings", pipeline.ringNumber());
             telemetry.addData("Position", pipeline.position);
             telemetry.update();
 
@@ -135,7 +135,7 @@ public class EasyOpenCVExample extends LinearOpMode
             Core.extractChannel(YCrCb, Cb, 1);
         }
 
-        @Override
+
         public void init(Mat firstFrame)
         {
             inputToCb(firstFrame);
@@ -143,7 +143,7 @@ public class EasyOpenCVExample extends LinearOpMode
             region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
         }
 
-        @Override
+
         public Mat processFrame(Mat input)
         {
             inputToCb(input);
@@ -175,10 +175,10 @@ public class EasyOpenCVExample extends LinearOpMode
 
             return input;
         }
-
-        public int getAnalysis()
+        public int ringNumber()
         {
             return avg1;
         }
     }
+
 }

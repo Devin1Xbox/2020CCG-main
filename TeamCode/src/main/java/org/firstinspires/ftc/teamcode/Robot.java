@@ -9,6 +9,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+//import org.opencv.core.Core;
+//import org.opencv.core.Mat;
+//import org.opencv.core.Point;
+//import org.opencv.core.Rect;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -19,10 +23,11 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.openftc.easyopencv.OpenCvPipeline;
 
-import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION1_TOPLEFT_ANCHOR_POINT;
-import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION_HEIGHT;
-import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION_WIDTH;
+//import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION1_TOPLEFT_ANCHOR_POINT;
+//import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION_HEIGHT;
+//import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION_WIDTH;
 
 public abstract class Robot extends EasyOpenCVExample {
 
@@ -35,10 +40,18 @@ public abstract class Robot extends EasyOpenCVExample {
 
     Servo wobbleServo, armServoL, armServoR;
 
-    DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor, armMotor, armWobble;
+    DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor, armMotor, armWobble, armLift;
+
+    OpenCvInternalCamera phoneCam;
+    SkystoneDeterminationPipeline pipeline;
+
+    int avg1;
+    int FOUR_RING_THRESHOLD;
+    int ONE_RING_THRESHOLD;
 
     @Override
     public void runOpMode() {
+        super.runOpMode();
         System.out.println("This is the hardware map from ROOBT" + hardwareMap);
         frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
@@ -48,8 +61,9 @@ public abstract class Robot extends EasyOpenCVExample {
         wobbleServo = hardwareMap.get(Servo.class, "servo");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         armWobble = hardwareMap.get(DcMotor.class, "armWobble");
-        armServoL = hardwareMap.get(Servo.class, "armServoL");
-        armServoR = hardwareMap.get(Servo.class, "armServoR");
+//        armServoL = hardwareMap.get(Servo.class, "armServoL");
+//        armServoR = hardwareMap.get(Servo.class, "armServoR");
+        armLift = hardwareMap.get(DcMotor.class, "armLift");
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -73,6 +87,8 @@ public abstract class Robot extends EasyOpenCVExample {
                 phoneCam.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
         });
+
+        waitForStart();
     }
 
 
@@ -209,7 +225,7 @@ public abstract class Robot extends EasyOpenCVExample {
         double calculatedTime = inches * 36.73469388;
         this.runtime.reset();
 
-        while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
+        while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime && opModeIsActive()) {
             telemetry.update();
             this.strafeRight(0.75);
         }
@@ -217,34 +233,8 @@ public abstract class Robot extends EasyOpenCVExample {
         this.sleep(2000);
     }
 
-    int isRing() {
-        Point region1_pointA = new Point(
-                REGION1_TOPLEFT_ANCHOR_POINT.x,
-                REGION1_TOPLEFT_ANCHOR_POINT.y);
-        Point region1_pointB = new Point(
-                REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-                REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
-        final int FOUR_RING_THRESHOLD = 147;
-        final int ONE_RING_THRESHOLD = 135;
-        Mat Cb = new Mat();
-        Mat region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
-        int avg1 = (int) Core.mean(region1_Cb).val[0];
-        Mat YCrCb = new Mat();
-        try {
-            if(avg1 > FOUR_RING_THRESHOLD){
-                return 4;
-            }else if (avg1 > ONE_RING_THRESHOLD){
-                return 1;
-            }else{
-                return 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d("Your mom", e.getMessage());
-            throw e;
-        }
-    }
 
+//this is stupid
     void toggleServoLock() {
         telemetry.addData("servo position: ", wobbleServo.getPosition());
         telemetry.update();
@@ -260,9 +250,12 @@ public abstract class Robot extends EasyOpenCVExample {
         }
     }
 
-    void armLift(int power) {
-        this.armServoL.setPosition(power);
-        this.armServoR.setPosition(-power);
-    }
+//    void armLift(int power) {
+//        this.armServoL.setPosition(power);
+//        this.armServoR.setPosition(-power);
+//    }
 
+    void armLift(double power) {
+        this.armLift(power);
+    }
 }

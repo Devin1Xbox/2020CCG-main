@@ -132,6 +132,15 @@ public class Main extends Robot {
                 this.toggleServoLock();
             }
 
+            if(gamepad1.left_bumper) {
+                this.armLift(0.5);
+            }
+
+            if(gamepad1.right_bumper) {
+                this.armLift(-0.5);
+            }
+
+
         }
 
     }
