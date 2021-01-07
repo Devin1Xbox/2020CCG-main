@@ -4,6 +4,10 @@
 *.ap_
 *.aab
 
+local.properties
+.gradle
+gradle
+
 !libs/*.aar
 
 # Files for the ART/Dalvik VM

@@ -36,38 +36,29 @@ public abstract class Robot extends EasyOpenCVExample {
 
     ElapsedTime lockTimer = new ElapsedTime();
 
-    DistanceSensor distanceSensor;
-
     Servo wobbleServo, armServoL, armServoR;
 
-    DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor, armMotor, armWobble, armLift;
-
-    OpenCvInternalCamera phoneCam;
-    SkystoneDeterminationPipeline pipeline;
-
-    int avg1;
-    int FOUR_RING_THRESHOLD;
-    int ONE_RING_THRESHOLD;
+    DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor, armMotor, armWobble, ringGrabberArmMotor, verticalLiftMotor;
 
     @Override
     public void runOpMode() {
-        super.runOpMode();
-        System.out.println("This is the hardware map from ROOBT" + hardwareMap);
         frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeftMotor");
         backLeftMotor = hardwareMap.get(DcMotor.class, "backLeftMotor");
         frontRightMotor = hardwareMap.get(DcMotor.class, "frontRightMotor");
         backRightMotor = hardwareMap.get(DcMotor.class, "backRightMotor");
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
         wobbleServo = hardwareMap.get(Servo.class, "servo");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
         armWobble = hardwareMap.get(DcMotor.class, "armWobble");
-//        armServoL = hardwareMap.get(Servo.class, "armServoL");
-//        armServoR = hardwareMap.get(Servo.class, "armServoR");
-        armLift = hardwareMap.get(DcMotor.class, "armLift");
+        armServoL = hardwareMap.get(Servo.class, "armServoL");
+        armServoR = hardwareMap.get(Servo.class, "armServoR");
+        verticalLiftMotor = hardwareMap.get(DcMotor.class, "verticalLiftMotor");
+        ringGrabberArmMotor = hardwareMap.get(DcMotor.class, "ringGrabberArmMotor");
         frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        ringGrabberArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -149,8 +140,6 @@ public abstract class Robot extends EasyOpenCVExample {
     }
 
     void arm(double power) {
-        telemetry.addData("armMotor", power);
-        telemetry.update();
         armMotor.setPower(power);
     }
 
@@ -250,10 +239,23 @@ public abstract class Robot extends EasyOpenCVExample {
         }
     }
 
-//    void armLift(int power) {
-//        this.armServoL.setPosition(power);
-//        this.armServoR.setPosition(-power);
-//    }
+    void openRingGrabber() {
+        this.armServoR.setPosition(0.9);
+        this.armServoL.setPosition(0.1);
+    }
+
+    void closeRingGrabber() {
+        this.armServoR.setPosition(0.1);
+        this.armServoL.setPosition(0.9);
+    }
+
+    void moveRingGrabberArm(double power) {
+        this.ringGrabberArmMotor.setPower(power);
+    }
+
+    void moveVerticalLift(double power) {
+        this.verticalLiftMotor.setPower(power);
+    }
 
     void armLift(double power) {
         this.armLift(power);
