@@ -13,12 +13,22 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 
 import org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @Autonomous(name = "AutonomousPrototype", group = "Autonomous")
 public class AutonomousPrototype extends Robot {
 
+    OpenCvInternalCamera phoneCam;
+    SkystoneDeterminationPipeline pipeline;
+    int ringNumber;
+    ElapsedTime time;
+
     @Override
     public void runOpMode() {
+        time.reset();
         super.runOpMode();
 
         double time = runtime.time(); //something tracking time but i know this aint it chief
@@ -27,50 +37,69 @@ public class AutonomousPrototype extends Robot {
 
         runtime.reset();
 
-//        while (opModeIsActive()) {
-//            telemetry.addData("rings: ", ringNumber());
-//            telemetry.update();
-            //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
-//            while (isRing() == 0 && time <= 3000) {
-////                this.goForward(0.5);
-////                if (time >= 3000) {
-////                    //ok i think it might be square A
-////                    this.strafeLeftInInches(6);//who knows the exact amount we'll see
-////                    //something with arm extending, then dropping servo, then turning armWobble until it drops ----MUCH TESTING NEEDED BUT WILL BE UNIVERSAL
-////                    break;
-////                }
-////            }
-////
-////            //1 ring
-////            if(isRing() == 1) {
-////                //go to square C
-////                this.goForwardsInInches(34); //who knows the exact amount we'll see
-////                this.strafeLeftInInches(6);
-////                //something with arm extending, then dropping servo, then turning armWobble until it drops ----MUCH TESTING NEEDED BUT WILL BE UNIVERSAL
-////            } else if(isRing() == 3) {
-////                //go to square B
-////                this.goForwardsInInches(22); //who knows the exact amount we'll see
-////                //something with arm extending, then dropping servo, then turning armWobble until it drops ----MUCH TESTING NEEDED BUT WILL BE UNIVERSAL
-////            } else {
-////                this.strafeLeftInInches(5); //yeah idk but i dont wanna be a noob and write break;
-////            }
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        pipeline = new SkystoneDeterminationPipeline();
+        phoneCam.setPipeline(pipeline);
 
-            this.goForwardsInInches(3);
-            this.strafeRightInInches(5);
-            stopMotors();
-//            if(ringNumber())
-            // from top view, A == 0 == bottom, B == 1 == middle, C == 4 == top
-//            if(isRing() == 4) {
-//
-//            }
-//            if(isRing() == 0) {
-//                this.goForwardsInInches(14);
-//            } else if(isRing() == 1) {
-//
-//            }
-//            while (opModeIsActive()) {
-//                telemetry.addData("rings: ", isRing());
-//                telemetry.update();
+        // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
+        // out when the RC activity is in portrait. We do our actual image processing assuming
+        // landscape orientation, though.
+        phoneCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+
+        phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
+        });
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+            this.time.reset();
+            detectRingNumber();
+            this.strafeRightInInches(20); //?
+            while(time > 6000) {
+                detectRingNumber();
+            }
+            //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
+            if(ringNumber == 0) {
+                //no rings, go to A on the bottom
+                this.goForwardsInInches(48);
+                this.strafeLeftInInches(10);
+                //drop wobble boi
+                this.stopMotors();
+            } else if(ringNumber == 1) {
+                //1 ring, go to B in the middle
+                this.goForwardsInInches(60);
+                //drop wobble boi
+                this.strafeLeftInInches(9);
+                this.goBackwardsInInches(16);
+                this.stopMotors();
+            } else {
+                //4 rings, go to C on the top
+                this.goForwardsInInches(78);
+                this.strafeLeftInInches(9);
+                //drop wobble boi
+                this.goBackwardsInInches(30);
+                this.stopMotors();
+            }
+            detectRingNumber();
         }
+    }
+    void detectRingNumber() {
+        if(pipeline.getAnalysis() > 147) {
+            ringNumber = 4;
+        } else if(pipeline.getAnalysis() < 147 && pipeline.getAnalysis() > 135) {
+            ringNumber = 1;
+        } else {
+            ringNumber = 0;
+        }
+        telemetry.addData("Number of Rings", ringNumber);
+        telemetry.addData("Color Analysis", pipeline.getAnalysis());
+        telemetry.update();
+    }
+}
+
 

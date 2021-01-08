@@ -69,7 +69,7 @@ public class EasyOpenCVExample extends LinearOpMode
 
         while (opModeIsActive())
         {
-            telemetry.addData("Number of Rings", pipeline.ringNumber());
+            telemetry.addData("Number of Rings", pipeline.getAnalysis());
             telemetry.addData("Position", pipeline.position);
             telemetry.update();
 
@@ -175,7 +175,7 @@ public class EasyOpenCVExample extends LinearOpMode
 
             return input;
         }
-        public int ringNumber()
+        public int getAnalysis()
         {
             return avg1;
         }
