@@ -24,14 +24,11 @@ public class AutonomousPrototype extends Robot {
     OpenCvInternalCamera phoneCam;
     SkystoneDeterminationPipeline pipeline;
     int ringNumber;
-    ElapsedTime time;
 
     @Override
     public void runOpMode() {
-        time.reset();
         super.runOpMode();
 
-        double time = runtime.time(); //something tracking time but i know this aint it chief
 
         waitForStart();
 
@@ -57,10 +54,10 @@ public class AutonomousPrototype extends Robot {
         waitForStart();
 
         while (opModeIsActive()) {
-            this.time.reset();
-            detectRingNumber();
-            this.strafeRightInInches(20); //?
-            while(time > 6000) {
+            this.goForwardsInInches(6);
+            this.turnRightInMilli(1);
+            ElapsedTime ringDetectionTimeLimit = new ElapsedTime();
+            while( ringDetectionTimeLimit.milliseconds() < 1000) {
                 detectRingNumber();
             }
             //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
@@ -69,11 +66,13 @@ public class AutonomousPrototype extends Robot {
                 this.goForwardsInInches(48);
                 this.strafeLeftInInches(10);
                 //drop wobble boi
+                this.toggleServoLock();
                 this.stopMotors();
             } else if(ringNumber == 1) {
                 //1 ring, go to B in the middle
                 this.goForwardsInInches(60);
                 //drop wobble boi
+                this.toggleServoLock();
                 this.strafeLeftInInches(9);
                 this.goBackwardsInInches(16);
                 this.stopMotors();
@@ -82,12 +81,16 @@ public class AutonomousPrototype extends Robot {
                 this.goForwardsInInches(78);
                 this.strafeLeftInInches(9);
                 //drop wobble boi
+                this.toggleServoLock();
                 this.goBackwardsInInches(30);
                 this.stopMotors();
             }
-            detectRingNumber();
+            this.stop();
         }
     }
+
+
+
     void detectRingNumber() {
         if(pipeline.getAnalysis() > 147) {
             ringNumber = 4;
