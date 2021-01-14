@@ -82,10 +82,10 @@ public abstract class Robot extends LinearOpMode {
 
     void turnLeft(double power) {
         // func of making robot go left
-        frontLeftMotor.setPower(-power);
-        backLeftMotor.setPower(-power);
-        frontRightMotor.setPower(power);
-        backRightMotor.setPower(power);
+        frontLeftMotor.setPower(power);
+        backLeftMotor.setPower(power);
+        frontRightMotor.setPower(-power);
+        backRightMotor.setPower(-power);
     }
 
     void turnRight(double power) {
@@ -155,25 +155,21 @@ public abstract class Robot extends LinearOpMode {
     }
 
     void turnLeftInMilli(double milliseconds) {
-        // we need to do some trail runs to find the real calculation
-        double calculatedTime = milliseconds;
         this.runtime.reset();
 
-        while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
+        while (this.opModeIsActive() && this.runtime.milliseconds() < milliseconds) {
             telemetry.update();
-            this.turnLeft(-0.75);
+            this.turnLeft(0.75);
         }
         this.stopMotors();
     }
 
     void turnRightInMilli(double milliseconds) {
-        // we need to do some trail runs to find the real calculation
-        double calculatedTime = milliseconds;
         this.runtime.reset();
 
-        while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
+        while (this.opModeIsActive() && this.runtime.milliseconds() < milliseconds) {
             telemetry.update();
-            this.turnRight(-0.75);
+            this.turnRight(0.75);
         }
         this.stopMotors();
     }
@@ -212,10 +208,10 @@ public abstract class Robot extends LinearOpMode {
 
         if(lockTimer.seconds() > 0.25) {
             lockTimer.reset();
-            if(this.wobbleServo.getPosition() > 0) {
-                this.wobbleServo.setPosition(-1.0);
+            if(this.wobbleServo.getPosition() > 0.2) {
+                this.wobbleServo.setPosition(0.2);
             } else {
-                this.wobbleServo.setPosition(1.0);
+                this.wobbleServo.setPosition(0.6);
             }
         }
     }

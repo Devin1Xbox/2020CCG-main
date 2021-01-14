@@ -65,6 +65,7 @@ public class Main extends Robot {
 
         waitForStart();
 
+
         while (opModeIsActive()) {
             armMotor.setDirection(DcMotor.Direction.FORWARD);
             telemetry.addData("frontLeftMotor", this.frontLeftMotor.getPower());
@@ -87,11 +88,11 @@ public class Main extends Robot {
             }
 
             if ((gamepad1.right_stick_y >= gamepad1.right_stick_x) && (gamepad1.right_stick_y <= -gamepad1.right_stick_x)) {
-                this.turnLeft(gamepad1.right_stick_x);
+                this.turnLeft(Math.abs(gamepad1.right_stick_x));
             }
 
             if ((gamepad1.right_stick_y <= gamepad1.right_stick_x) && (gamepad1.right_stick_y >= -gamepad1.right_stick_x)) {
-                this.turnRight(gamepad1.right_stick_x);
+                this.turnRight(Math.abs(gamepad1.right_stick_x));
             }
 
             if (gamepad1.left_trigger != 0) {
