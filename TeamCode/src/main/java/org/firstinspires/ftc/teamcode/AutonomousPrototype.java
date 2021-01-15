@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -55,41 +57,49 @@ public class AutonomousPrototype extends Robot {
 
         while (opModeIsActive()) {
             this.goForwardsInInches(6);
-            this.turnRightInMilli(1);
+            this.turnRightInMilli(100);
             ElapsedTime ringDetectionTimeLimit = new ElapsedTime();
-            while( ringDetectionTimeLimit.milliseconds() < 1000) {
+            while(ringDetectionTimeLimit.milliseconds() < 1000) {
                 detectRingNumber();
             }
+            if(ringNumber == 0 || ringNumber == 1) {
+                this.goForwardsInInches(2);
+            }
+            while(ringDetectionTimeLimit.milliseconds() < 1000) {
+                detectRingNumber();
+            }
+            this.turnLeftInMilli(150);
             //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
             if(ringNumber == 0) {
                 //no rings, go to A on the bottom
-                this.goForwardsInInches(48);
-                this.strafeLeftInInches(10);
-                //drop wobble boi
-                this.toggleServoLock();
-                this.stopMotors();
-            } else if(ringNumber == 1) {
-                //1 ring, go to B in the middle
                 this.goForwardsInInches(60);
                 //drop wobble boi
                 this.toggleServoLock();
-                this.strafeLeftInInches(9);
-                this.goBackwardsInInches(16);
+                this.sleep(100);
+                this.stopMotors();
+            } else if(ringNumber == 1) {
+                //1 ring, go to B in the middle
+                this.goForwardsInInches(120);
+                //drop wobble boi
+                this.sleep(100);
+                this.strafeLeftInInches(10);
+                this.goBackwardsInInches(23);
                 this.stopMotors();
             } else {
                 //4 rings, go to C on the top
-                this.goForwardsInInches(78);
-                this.strafeLeftInInches(9);
+                this.goForwardsInInches(137);
+                this.strafeLeftInInches(16);
+                this.turnLeftInMilli(333);
                 //drop wobble boi
                 this.toggleServoLock();
-                this.goBackwardsInInches(30);
+                this.goBackwardsInInches(75);
                 this.stopMotors();
             }
             this.stop();
         }
     }
 
-
+//all motivation is gone
 
     void detectRingNumber() {
         if(pipeline.getAnalysis() > 147) {

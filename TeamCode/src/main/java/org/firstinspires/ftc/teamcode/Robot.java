@@ -97,7 +97,6 @@ public abstract class Robot extends LinearOpMode {
     }
 
     void strafeRight(double power) {
-
         // func of making robot strafe left **still questionable
         frontLeftMotor.setPower(-power);
         backLeftMotor.setPower(power);
