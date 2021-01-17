@@ -23,6 +23,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 @Autonomous(name = "AutonomousPrototype", group = "Autonomous")
 public class AutonomousPrototype extends Robot {
 
+    ElapsedTime wobblePowerChange = new ElapsedTime();
     OpenCvInternalCamera phoneCam;
     SkystoneDeterminationPipeline pipeline;
     int ringNumber;
@@ -56,24 +57,24 @@ public class AutonomousPrototype extends Robot {
         waitForStart();
 
         while (opModeIsActive()) {
+            wobblePowerChange.reset();
+            while(wobblePowerChange.milliseconds() < 750) {
+                this.armWobble(-1.0);
+            }
+            this.armWobble(-0.6);
             this.goForwardsInInches(6);
-            this.turnRightInMilli(100);
+            this.turnRightInMilli(85);
             ElapsedTime ringDetectionTimeLimit = new ElapsedTime();
-            while(ringDetectionTimeLimit.milliseconds() < 1000) {
-                detectRingNumber();
-            }
-            if(ringNumber == 0 || ringNumber == 1) {
-                this.goForwardsInInches(2);
-            }
-            while(ringDetectionTimeLimit.milliseconds() < 1000) {
+            while(ringDetectionTimeLimit.milliseconds() < 2000) {
                 detectRingNumber();
             }
             this.turnLeftInMilli(150);
             //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
             if(ringNumber == 0) {
                 //no rings, go to A on the bottom
-                this.goForwardsInInches(60);
+                this.goForwardsInInches(80);
                 //drop wobble boi
+                this.armWobble(0.0);
                 this.toggleServoLock();
                 this.sleep(100);
                 this.stopMotors();
@@ -81,7 +82,9 @@ public class AutonomousPrototype extends Robot {
                 //1 ring, go to B in the middle
                 this.goForwardsInInches(120);
                 //drop wobble boi
-                this.sleep(100);
+                this.armWobble(0.0);
+                this.toggleServoLock();
+                this.sleep(1000);                                  //  𝘣𝘳𝘦𝘢𝘬𝘥𝘢𝘯𝘤𝘦𝘴
                 this.strafeLeftInInches(10);
                 this.goBackwardsInInches(23);
                 this.stopMotors();
@@ -91,7 +94,9 @@ public class AutonomousPrototype extends Robot {
                 this.strafeLeftInInches(16);
                 this.turnLeftInMilli(333);
                 //drop wobble boi
+                this.armWobble(0.0);
                 this.toggleServoLock();
+                this.sleep(1000);
                 this.goBackwardsInInches(75);
                 this.stopMotors();
             }
@@ -102,9 +107,9 @@ public class AutonomousPrototype extends Robot {
 //all motivation is gone
 
     void detectRingNumber() {
-        if(pipeline.getAnalysis() > 147) {
+        if(pipeline.getAnalysis() > 146) {
             ringNumber = 4;
-        } else if(pipeline.getAnalysis() < 147 && pipeline.getAnalysis() > 135) {
+        } else if(pipeline.getAnalysis() < 146 && pipeline.getAnalysis() >= 137) {
             ringNumber = 1;
         } else {
             ringNumber = 0;

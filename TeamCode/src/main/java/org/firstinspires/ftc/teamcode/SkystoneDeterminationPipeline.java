@@ -34,8 +34,8 @@ public class SkystoneDeterminationPipeline extends OpenCvPipeline
     static final int REGION_WIDTH = 35;
     static final int REGION_HEIGHT = 30;
 
-    final int FOUR_RING_THRESHOLD = 154;
-    final int ONE_RING_THRESHOLD = 138;
+    final int FOUR_RING_THRESHOLD = 146;
+    final int ONE_RING_THRESHOLD = 137;
 
     Point region1_pointA = new Point(
             REGION1_TOPLEFT_ANCHOR_POINT.x,
@@ -88,9 +88,9 @@ public class SkystoneDeterminationPipeline extends OpenCvPipeline
                 2); // Thickness of the rectangle lines
 
         position = EasyOpenCVExample.SkystoneDeterminationPipeline.RingPosition.FOUR; // Record our analysis
-        if(avg1 > FOUR_RING_THRESHOLD){
+        if(avg1 >= FOUR_RING_THRESHOLD){
             position = EasyOpenCVExample.SkystoneDeterminationPipeline.RingPosition.FOUR;
-        }else if (avg1 > ONE_RING_THRESHOLD){
+        }else if (avg1 >= ONE_RING_THRESHOLD){
             position = EasyOpenCVExample.SkystoneDeterminationPipeline.RingPosition.ONE;
         }else{
             position = EasyOpenCVExample.SkystoneDeterminationPipeline.RingPosition.NONE;

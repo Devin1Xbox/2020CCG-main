@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -57,9 +58,9 @@ public abstract class Robot extends LinearOpMode {
         backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
         backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        ringGrabberArmMotor.setDirection(DcMotor.Direction.REVERSE);
 
         ringGrabberArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
 
     }
 
@@ -147,7 +148,7 @@ public abstract class Robot extends LinearOpMode {
 
         while (this.opModeIsActive() && this.runtime.milliseconds() < calculatedTime) {
             telemetry.update();
-            this.goBackward(0.5);
+            this.goBackward(0.75);
         }
         this.stopMotors();
         this.sleep(500);
