@@ -32,7 +32,6 @@ public class AutonomousPrototype extends Robot {
     public void runOpMode() {
         super.runOpMode();
 
-
         waitForStart();
 
         runtime.reset();
@@ -69,35 +68,35 @@ public class AutonomousPrototype extends Robot {
                 detectRingNumber();
             }
             this.turnLeftInMilli(150);
+            this.strafeLeftInInches(6);
             //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
             if(ringNumber == 0) {
                 //no rings, go to A on the bottom
                 this.goForwardsInInches(80);
                 //drop wobble boi
                 this.armWobble(0.0);
-                this.toggleServoLock();
-                this.sleep(100);
+                this.wobbleServo.setPosition(0.6);
+                this.sleep(1000);
                 this.stopMotors();
             } else if(ringNumber == 1) {
                 //1 ring, go to B in the middle
                 this.goForwardsInInches(120);
+                this.strafeRightInInches(24);
                 //drop wobble boi
                 this.armWobble(0.0);
-                this.toggleServoLock();
+                this.wobbleServo.setPosition(0.6);
                 this.sleep(1000);                                  //  𝘣𝘳𝘦𝘢𝘬𝘥𝘢𝘯𝘤𝘦𝘴
-                this.strafeLeftInInches(10);
-                this.goBackwardsInInches(23);
+                this.goBackwardsInInches(25);
                 this.stopMotors();
             } else {
                 //4 rings, go to C on the top
-                this.goForwardsInInches(137);
+                this.goForwardsInInches(144);
                 this.strafeLeftInInches(16);
-                this.turnLeftInMilli(333);
                 //drop wobble boi
                 this.armWobble(0.0);
-                this.toggleServoLock();
-                this.sleep(1000);
-                this.goBackwardsInInches(75);
+                this.wobbleServo.setPosition(0.6);
+                this.sleep(2000);
+                this.goBackwardsInInches(65);
                 this.stopMotors();
             }
             this.stop();
@@ -109,7 +108,7 @@ public class AutonomousPrototype extends Robot {
     void detectRingNumber() {
         if(pipeline.getAnalysis() > 146) {
             ringNumber = 4;
-        } else if(pipeline.getAnalysis() < 146 && pipeline.getAnalysis() >= 137) {
+        } else if(pipeline.getAnalysis() < 146 && pipeline.getAnalysis() >= 136) {
             ringNumber = 1;
         } else {
             ringNumber = 0;
