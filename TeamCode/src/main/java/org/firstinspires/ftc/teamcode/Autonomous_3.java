@@ -20,8 +20,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name = "AutonomousPrototype", group = "Autonomous")
-public class AutonomousPrototype extends Robot {
+@Autonomous(name = "Autonomous_3", group = "Autonomous")
+public class Autonomous_3 extends Robot {
 
     ElapsedTime wobblePowerChange = new ElapsedTime();
     OpenCvInternalCamera phoneCam;
@@ -73,6 +73,8 @@ public class AutonomousPrototype extends Robot {
             if(ringNumber == 0) {
                 //no rings, go to A on the bottom
                 this.goForwardsInInches(80);
+                this.strafeRightInInches(16);
+                this.turnAround();
                 //drop wobble boi
                 this.armWobble(0.0);
                 this.wobbleServo.setPosition(0.6);
@@ -81,7 +83,6 @@ public class AutonomousPrototype extends Robot {
             } else if(ringNumber == 1) {
                 //1 ring, go to B in the middle
                 this.goForwardsInInches(120);
-                this.strafeRightInInches(24);
                 //drop wobble boi
                 this.armWobble(0.0);
                 this.wobbleServo.setPosition(0.6);
@@ -91,12 +92,13 @@ public class AutonomousPrototype extends Robot {
             } else {
                 //4 rings, go to C on the top
                 this.goForwardsInInches(144);
-                this.strafeLeftInInches(16);
+                this.strafeRightInInches(16);
+                this.turnAround();
                 //drop wobble boi
                 this.armWobble(0.0);
                 this.wobbleServo.setPosition(0.6);
                 this.sleep(2000);
-                this.goBackwardsInInches(65);
+                this.goForwardsInInches(65);
                 this.stopMotors();
             }
             this.stop();
@@ -118,5 +120,3 @@ public class AutonomousPrototype extends Robot {
         telemetry.update();
     }
 }
-
-

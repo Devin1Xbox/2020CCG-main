@@ -26,10 +26,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-//import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION1_TOPLEFT_ANCHOR_POINT;
-//import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION_HEIGHT;
-//import static org.firstinspires.ftc.teamcode.EasyOpenCVExample.SkystoneDeterminationPipeline.REGION_WIDTH;
-
 public abstract class Robot extends LinearOpMode {
 
 
@@ -172,6 +168,10 @@ public abstract class Robot extends LinearOpMode {
             this.turnRight(0.75);
         }
         this.stopMotors();
+    }
+
+    void turnAround() {
+        this.turnRightInMilli(1500);
     }
 
     void strafeLeftInInches(double inches) {
