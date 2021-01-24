@@ -82,7 +82,7 @@ public class Autonomous_4 extends Robot {
                 //1 ring, go to B in the middle
                 this.goForwardsInInches(120);
                 this.strafeLeftInInches(24);
-                this.turnLeftInMilli(125)
+                this.turnLeftInMilli(125);
                 //drop wobble boi
                 this.armWobble(0.0);
                 this.wobbleServo.setPosition(0.6);
