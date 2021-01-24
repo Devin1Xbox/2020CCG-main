@@ -62,7 +62,7 @@ public class Autonomous_2 extends Robot {
             }
             this.armWobble(-0.6);
             this.goForwardsInInches(6);
-            this.turnLeftInMilli(125);
+            this.turnLeftInMilli(242);
             ElapsedTime ringDetectionTimeLimit = new ElapsedTime();
             while(ringDetectionTimeLimit.milliseconds() < 2000) {
                 detectRingNumber();

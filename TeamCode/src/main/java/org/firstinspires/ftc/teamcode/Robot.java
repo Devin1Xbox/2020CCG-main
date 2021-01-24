@@ -171,7 +171,8 @@ public abstract class Robot extends LinearOpMode {
     }
 
     void turnAround() {
-        this.turnRightInMilli(1500);
+        this.turnRightInMilli(2175);
+        this.sleep(250);
     }
 
     void strafeLeftInInches(double inches) {
