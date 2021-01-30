@@ -67,12 +67,14 @@ public class Autonomous_4 extends Robot {
             while(ringDetectionTimeLimit.milliseconds() < 2000) {
                 detectRingNumber();
             }
-            this.turnRightInMilli(150);
+            this.turnRightInMilli(300);
             this.strafeRightInInches(4);
             //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
             if(ringNumber == 0) {
                 //no rings, go to A on the bottom
                 this.goForwardsInInches(80);
+                this.strafeLeftInInches(11);
+                this.turnAround();
                 //drop wobble boi
                 this.armWobble(0.0);
                 this.wobbleServo.setPosition(0.6);
@@ -81,8 +83,7 @@ public class Autonomous_4 extends Robot {
             } else if(ringNumber == 1) {
                 //1 ring, go to B in the middle
                 this.goForwardsInInches(120);
-                this.strafeLeftInInches(24);
-                this.turnLeftInMilli(125);
+                this.strafeLeftInInches(4);
                 //drop wobble boi
                 this.armWobble(0.0);
                 this.wobbleServo.setPosition(0.6);
@@ -92,11 +93,13 @@ public class Autonomous_4 extends Robot {
             } else {
                 //4 rings, go to C on the top
                 this.goForwardsInInches(144);
+                this.strafeLeftInInches(14);
+                this.turnAround();
                 //drop wobble boi
                 this.armWobble(0.0);
                 this.wobbleServo.setPosition(0.6);
                 this.sleep(2000);
-                this.goBackwardsInInches(65);
+                this.goForwardsInInches(52);
                 this.stopMotors();
             }
             this.stop();

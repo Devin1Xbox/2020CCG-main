@@ -103,9 +103,9 @@ public class Main extends Robot {
                 this.strafeRight(gamepad1.right_trigger);
             }
 
-            if(gamepad1.b) {
-                this.turnAround();
-            }
+//            if(gamepad1.b) {
+//                this.turnAround();
+//            }
 
 
             if (gamepad2.dpad_left) {
