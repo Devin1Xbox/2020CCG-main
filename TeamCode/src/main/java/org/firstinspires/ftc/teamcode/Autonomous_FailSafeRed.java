@@ -20,8 +20,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name = "Autonomous_4", group = "Autonomous")
-public class Autonomous_4 extends Robot {
+@Autonomous(name = "Autonomous_FailSafeRed", group = "Autonomous")
+public class Autonomous_FailSafeRed extends Robot {
 
     ElapsedTime wobblePowerChange = new ElapsedTime();
     OpenCvInternalCamera phoneCam;
@@ -56,68 +56,21 @@ public class Autonomous_4 extends Robot {
         waitForStart();
 
         while (opModeIsActive()) {
+            while(wobblePowerChange.milliseconds() < 3000) {
+                this.stopMotors();
+            }
             wobblePowerChange.reset();
             while(wobblePowerChange.milliseconds() < 750) {
                 this.armWobble(-1.0);
             }
             this.armWobble(-0.6);
-            this.goForwardsInInches(6);
-            this.turnLeftInMilli(242);
-            ElapsedTime ringDetectionTimeLimit = new ElapsedTime();
-            while(ringDetectionTimeLimit.milliseconds() < 2000) {
-                detectRingNumber();
-            }
-            this.turnRightInMilli(300);
-            this.strafeRightInInches(4);
-            //alright so we're gonna detect the amount of rings in a fixed position--if it's 0, then we'll have to set a time to stop moving by
-            if(ringNumber == 0 && opModeIsActive()) {
-                //no rings, go to A on the bottom
-                this.goForwardsInInches(80);
-                this.strafeLeftInInches(11);
-                this.turnAround();
-                //drop wobble boi
-                this.armWobble(0.0);
-                this.wobbleServo.setPosition(0.6);
-                this.sleep(1000);
-                this.stopMotors();
-            } else if(ringNumber == 1 && opModeIsActive()) {
-                //1 ring, go to B in the middle
-                this.goForwardsInInches(120);
-                this.strafeLeftInInches(4);
-                //drop wobble boi
-                this.armWobble(0.0);
-                this.wobbleServo.setPosition(0.6);
-                this.sleep(1000);                                  //  𝘣𝘳𝘦𝘢𝘬𝘥𝘢𝘯𝘤𝘦𝘴
-                this.goBackwardsInInches(25);
-                this.stopMotors();
-            } else {
-                //4 rings, go to C on the top
-                this.goForwardsInInches(144);
-                this.strafeLeftInInches(14);
-                this.turnAround();
-                //drop wobble boi
-                this.armWobble(0.0);
-                this.wobbleServo.setPosition(0.6);
-                this.sleep(2000);
-                this.goForwardsInInches(52);
+            while(wobblePowerChange.milliseconds() < 12500) {
                 this.stopMotors();
             }
+            this.strafeLeftInInches(103);
+            this.goForwardsInInches(90);
             this.stop();
         }
     }
-
-//all motivation is gone
-
-    void detectRingNumber() {
-        if(pipeline.getAnalysis() > 146) {
-            ringNumber = 4;
-        } else if(pipeline.getAnalysis() < 146 && pipeline.getAnalysis() >= 136) {
-            ringNumber = 1;
-        } else {
-            ringNumber = 0;
-        }
-        telemetry.addData("Number of Rings", ringNumber);
-        telemetry.addData("Color Analysis", pipeline.getAnalysis());
-        telemetry.update();
-    }
 }
+
