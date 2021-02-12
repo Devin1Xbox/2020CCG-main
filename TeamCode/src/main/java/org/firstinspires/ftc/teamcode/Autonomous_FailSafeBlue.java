@@ -58,15 +58,14 @@ public class Autonomous_FailSafeBlue extends Robot {
         waitForStart();
 
         while (opModeIsActive()) {
-            while(wobblePowerChange.milliseconds() < 3000) {
+            while(wobblePowerChange.milliseconds() < 7000) {
                 this.stopMotors();
             }
-            wobblePowerChange.reset();
-            while(wobblePowerChange.milliseconds() < 750) {
+            while(wobblePowerChange.milliseconds() < 7750) {
                 this.armWobble(-1.0);
             }
             this.armWobble(-0.6);
-            while(wobblePowerChange.milliseconds() < 12500) {
+            while(wobblePowerChange.milliseconds() < 8000) {
                 this.stopMotors();
             }
             this.strafeRightInInches(103);
